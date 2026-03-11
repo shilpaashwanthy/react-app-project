@@ -19,16 +19,20 @@ pipeline {
             }
         }
 
-        stage('Push Image to DockerHub') {
-            steps {
-                withCredentials([usernamePassword(credentialsId: 'dockerhub-creds', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
-                    sh '''
-                    docker login $DOCKER_USER -p $DOCKER_PASS
-                    docker push shilpapauline09/devops-build-dev:latest
-                    '''
-                }
-            }
+       stage('Push Image to DockerHub') {
+    steps {
+        withCredentials([usernamePassword(
+            credentialsId: 'dockerhub-creds',
+            usernameVariable: 'DOCKER_USER',
+            passwordVariable: 'DOCKER_PASS'
+        )]) {
+            sh '''
+            echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin
+            docker push shilpapauline09/devops-build-dev:latest
+            '''
         }
+    }
+} 
 
     }
 
